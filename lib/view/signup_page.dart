@@ -1,28 +1,28 @@
 import 'package:chat_app/service/authentication_service.dart';
 import 'package:chat_app/view/home_page.dart';
-import 'package:chat_app/view/signup_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpPageState extends State<SignUpPage> {
   final FirebaseAuthenticationService authenticationService =
       FirebaseAuthenticationService();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
 
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    nameController.dispose();
     super.dispose();
   }
 
@@ -74,6 +74,19 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(20),
                         color: Colors.grey[200]),
                     child: TextFormField(
+                        controller: nameController,
+                        decoration: InputDecoration(
+                            hintText: '  Name', border: InputBorder.none)),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                    width: 300,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.grey[200]),
+                    child: TextFormField(
                         controller: emailController,
                         decoration: InputDecoration(
                             hintText: '  Email', border: InputBorder.none)),
@@ -92,12 +105,9 @@ class _LoginPageState extends State<LoginPage> {
                         decoration: InputDecoration(
                             hintText: '  Password', border: InputBorder.none)),
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
                   ElevatedButton(
                     onPressed: () {
-                      signIn();
+                      signUp();
                     },
                     style: ButtonStyle(
                       fixedSize:
@@ -110,59 +120,6 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.grey[200]),
-                        child: IconButton(
-                            onPressed: () {},
-                            icon: Icon(FontAwesomeIcons.google)),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.grey[200]),
-                        child: IconButton(
-                            onPressed: () {},
-                            icon: Icon(FontAwesomeIcons.phone)),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  GestureDetector(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Don't have account?",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          'signUp',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => SignUpPage(),
-                      ));
-                    },
-                  ),
                 ],
               ),
             ),
@@ -172,11 +129,12 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void signIn() async {
+  void signUp() async {
+    String name = nameController.text;
     String email = emailController.text;
     String password = passwordController.text;
-    User? user =
-        await authenticationService.signIpWithEmailAndPassword(email, password);
+    User? user = await authenticationService.signUpWithEmailAndPassword(
+        name, email, password);
     if (user != null) {
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (context) => HomePage()));
