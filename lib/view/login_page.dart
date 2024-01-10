@@ -14,8 +14,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final FirebaseAuthenticationService authenticationService =
-      FirebaseAuthenticationService();
+  final AuthenticationService authenticationService = AuthenticationService();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -121,7 +120,9 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius: BorderRadius.circular(15),
                             color: Colors.grey[200]),
                         child: IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              authenticationService.signinWithGoogle();
+                            },
                             icon: Icon(FontAwesomeIcons.google)),
                       ),
                       SizedBox(
@@ -134,6 +135,17 @@ class _LoginPageState extends State<LoginPage> {
                         child: IconButton(
                             onPressed: () {},
                             icon: Icon(FontAwesomeIcons.phone)),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Colors.grey[200]),
+                        child: IconButton(
+                            onPressed: () {},
+                            icon: Icon(FontAwesomeIcons.github)),
                       ),
                     ],
                   ),
@@ -176,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
     String email = emailController.text;
     String password = passwordController.text;
     User? user =
-        await authenticationService.signIpWithEmailAndPassword(email, password);
+        await authenticationService.signInWithEmailAndPassword(email, password);
     if (user != null) {
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (context) => HomePage()));

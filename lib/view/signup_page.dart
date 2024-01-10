@@ -12,8 +12,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  final FirebaseAuthenticationService authenticationService =
-      FirebaseAuthenticationService();
+  final AuthenticationService authenticationService = AuthenticationService();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController nameController = TextEditingController();

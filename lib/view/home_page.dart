@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
         child: GestureDetector(
           child: Text('Sign Out'),
           onTap: () async {
-            await FirebaseAuthenticationService().signout();
+            await AuthenticationService().signout();
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (ctx) => OnBoarding()));
           },
