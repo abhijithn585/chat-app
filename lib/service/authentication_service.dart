@@ -1,16 +1,22 @@
 import 'package:chat_app/model/user_model.dart';
+import 'package:chat_app/view/widget/custom_alert_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthenticationService {
-  FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+
   Future<User?> signUpWithEmailAndPassword(
-      String name, String email, String password) async {
+    String name,
+    String email,
+    String password,
+  ) async {
     try {
-      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
-          email: email, password: password);
+      UserCredential userCredential = await firebaseAuth
+          .createUserWithEmailAndPassword(email: email, password: password);
       //after creating the user , create a new doccument for the user in the users collection
       firestore
           .collection('users')
@@ -24,10 +30,10 @@ class AuthenticationService {
   }
 
   Future<User?> signInWithEmailAndPassword(
-      String email, String password) async {
+      String email, String password, context) async {
     try {
-      UserCredential userCredential = await auth.signInWithEmailAndPassword(
-          email: email, password: password);
+      UserCredential userCredential = await firebaseAuth
+          .signInWithEmailAndPassword(email: email, password: password);
       firestore.collection('users').doc(userCredential.user!.uid).set(
           {'uid': userCredential.user!.uid, 'email': email},
           SetOptions(merge: true));
@@ -58,9 +64,66 @@ class AuthenticationService {
     }
   }
 
-  signout() async {
+  void signInWithPhone(
+      String phonenumber, context, String name, String email) async {
     try {
-      await auth.signOut();
+      await firebaseAuth.verifyPhoneNumber(
+        phoneNumber: phonenumber,
+        verificationCompleted: (PhoneAuthCredential phoneAuthCredential) async {
+          var cred =
+              await firebaseAuth.signInWithCredential(phoneAuthCredential);
+          final UserModel userdata = UserModel(
+              name: name,
+              email: email,
+              uid: cred.user!.uid,
+              phonenumber: cred.user!.phoneNumber);
+          firestore
+              .collection('users')
+              .doc(cred.user!.uid)
+              .set(userdata.toJson());
+        },
+        verificationFailed: (error) {
+          throw Exception(error.message);
+        },
+        codeSent: ((verificationId, resendToken) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return CustomAlertDialog(
+                veridicationId: verificationId,
+              );
+            },
+          );
+        }),
+        codeAutoRetrievalTimeout: (verificationId) {},
+      );
+    } on FirebaseAuthException catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  void verifyOtp(
+      {required String verificationId,
+      required String otp,
+      required Function onSuccess}) async {
+    try {
+      PhoneAuthCredential cred = PhoneAuthProvider.credential(
+          verificationId: verificationId, smsCode: otp);
+      User? user = (await firebaseAuth.signInWithCredential(cred)).user;
+
+      if (user != null) {
+        onSuccess();
+      }
+    } on FirebaseAuthException catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<void> signout() async {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    try {
+      await firebaseAuth.signOut();
+      await googleSignIn.signOut();
     } catch (e) {
       print('This is the erro r$e');
     }

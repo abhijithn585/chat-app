@@ -1,8 +1,11 @@
+import 'package:chat_app/controller/auth_provider.dart';
+import 'package:chat_app/controller/firebase_provider.dart';
+import 'package:chat_app/controller/otp_provider.dart';
 import 'package:chat_app/firebase_options.dart';
 import 'package:chat_app/view/main_page.dart';
-import 'package:chat_app/view/onboarding.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,9 +23,22 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MainPage(),
-      debugShowCheckedModeBanner: false,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => OtpProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AuthProviders(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => FirebaseProvider(),
+        )
+      ],
+      child: const MaterialApp(
+        home: MainPage(),
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }

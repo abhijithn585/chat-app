@@ -1,7 +1,6 @@
 import 'package:chat_app/service/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ChatRoom extends StatefulWidget {
@@ -33,6 +32,9 @@ class _ChatRoomState extends State<ChatRoom> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.receiverUserEmail),
+      ),
       body: Column(
         children: [
           Expanded(child: buildMessageList()),
@@ -52,7 +54,7 @@ class _ChatRoomState extends State<ChatRoom> {
           return Text('Error ${snapshot.error}');
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
         return ListView(
           children: snapshot.data!.docs

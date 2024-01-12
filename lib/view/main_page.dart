@@ -1,5 +1,4 @@
 import 'package:chat_app/view/home_page.dart';
-import 'package:chat_app/view/login_page.dart';
 import 'package:chat_app/view/onboarding.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +18,9 @@ class _MainPageState extends State<MainPage> {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return HomePage();
+            return const HomePage();
           } else {
-            return OnBoarding();
+            return const OnBoarding();
           }
         },
       ),

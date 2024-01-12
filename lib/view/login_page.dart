@@ -1,5 +1,6 @@
 import 'package:chat_app/service/authentication_service.dart';
 import 'package:chat_app/view/home_page.dart';
+import 'package:chat_app/view/phone_login_page.dart';
 import 'package:chat_app/view/signup_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,9 @@ class _LoginPageState extends State<LoginPage> {
       body: Stack(
         children: [
           Container(
+            color: Colors.black,
+            height: 400,
+            width: double.infinity,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -47,13 +51,10 @@ class _LoginPageState extends State<LoginPage> {
                 Text(
                   'Sign in-up to enjoy',
                   style: GoogleFonts.roboto(
-                      color: Color.fromARGB(255, 165, 165, 165)),
+                      color: const Color.fromARGB(255, 165, 165, 165)),
                 )
               ],
             ),
-            color: Colors.black,
-            height: 400,
-            width: double.infinity,
           ),
           Align(
             alignment: Alignment.bottomCenter,
@@ -72,12 +73,15 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: Colors.grey[200]),
-                    child: TextFormField(
-                        controller: emailController,
-                        decoration: InputDecoration(
-                            hintText: '  Email', border: InputBorder.none)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                          controller: emailController,
+                          decoration: const InputDecoration(
+                              hintText: '  Email', border: InputBorder.none)),
+                    ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Container(
@@ -85,13 +89,17 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: Colors.grey[200]),
-                    child: TextFormField(
-                        controller: passwordController,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                            hintText: '  Password', border: InputBorder.none)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                          controller: passwordController,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                              hintText: '  Password',
+                              border: InputBorder.none)),
+                    ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   ElevatedButton(
@@ -99,17 +107,17 @@ class _LoginPageState extends State<LoginPage> {
                       signIn();
                     },
                     style: ButtonStyle(
-                      fixedSize:
-                          MaterialStateProperty.all<Size>(Size.fromWidth(200)),
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Color(0xFF688a74)),
+                      fixedSize: MaterialStateProperty.all<Size>(
+                          const Size.fromWidth(200)),
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          const Color(0xFF688a74)),
                     ),
-                    child: Text(
+                    child: const Text(
                       "Get Started",
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Row(
@@ -123,9 +131,24 @@ class _LoginPageState extends State<LoginPage> {
                             onPressed: () {
                               authenticationService.signinWithGoogle();
                             },
-                            icon: Icon(FontAwesomeIcons.google)),
+                            icon: const Icon(FontAwesomeIcons.google)),
                       ),
-                      SizedBox(
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Colors.grey[200]),
+                        child: IconButton(
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => PhoneLoginPage(),
+                              ));
+                            },
+                            icon: const Icon(FontAwesomeIcons.phone)),
+                      ),
+                      const SizedBox(
                         width: 10,
                       ),
                       Container(
@@ -134,26 +157,15 @@ class _LoginPageState extends State<LoginPage> {
                             color: Colors.grey[200]),
                         child: IconButton(
                             onPressed: () {},
-                            icon: Icon(FontAwesomeIcons.phone)),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.grey[200]),
-                        child: IconButton(
-                            onPressed: () {},
-                            icon: Icon(FontAwesomeIcons.github)),
+                            icon: const Icon(FontAwesomeIcons.github)),
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   GestureDetector(
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
@@ -171,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => SignUpPage(),
+                        builder: (context) => const SignUpPage(),
                       ));
                     },
                   ),
@@ -187,11 +199,12 @@ class _LoginPageState extends State<LoginPage> {
   void signIn() async {
     String email = emailController.text;
     String password = passwordController.text;
-    User? user =
-        await authenticationService.signInWithEmailAndPassword(email, password);
+    User? user = await authenticationService.signInWithEmailAndPassword(
+        email, password, context);
     if (user != null) {
+      // ignore: use_build_context_synchronously
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => HomePage()));
+          .push(MaterialPageRoute(builder: (context) => const HomePage()));
     } else {
       print('there is some error ');
     }

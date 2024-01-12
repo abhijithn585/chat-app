@@ -15,7 +15,7 @@ class _OnBoardingState extends State<OnBoarding> {
     return Scaffold(
       body: Stack(
         children: [
-          Container(
+          SizedBox(
             width: 400,
             height: 600,
             child: Image.asset(
@@ -42,7 +42,7 @@ class _OnBoardingState extends State<OnBoarding> {
               ),
             ),
           ),
-          Container(
+          SizedBox(
             width: double.infinity,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -68,16 +68,16 @@ class _OnBoardingState extends State<OnBoarding> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => LoginPage()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const LoginPage()));
                   },
                   style: ButtonStyle(
-                    fixedSize:
-                        MaterialStateProperty.all<Size>(Size.fromWidth(200)),
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Color(0xFF688a74)),
+                    fixedSize: MaterialStateProperty.all<Size>(
+                        const Size.fromWidth(200)),
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        const Color(0xFF688a74)),
                   ),
-                  child: Text(
+                  child: const Text(
                     "Get Started",
                     style: TextStyle(color: Colors.white),
                   ),

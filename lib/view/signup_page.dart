@@ -31,6 +31,9 @@ class _SignUpPageState extends State<SignUpPage> {
       body: Stack(
         children: [
           Container(
+            color: Colors.black,
+            height: 400,
+            width: double.infinity,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -47,13 +50,10 @@ class _SignUpPageState extends State<SignUpPage> {
                 Text(
                   'Sign in-up to enjoy',
                   style: GoogleFonts.roboto(
-                      color: Color.fromARGB(255, 165, 165, 165)),
+                      color: const Color.fromARGB(255, 165, 165, 165)),
                 )
               ],
             ),
-            color: Colors.black,
-            height: 400,
-            width: double.infinity,
           ),
           Align(
             alignment: Alignment.bottomCenter,
@@ -72,12 +72,15 @@ class _SignUpPageState extends State<SignUpPage> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: Colors.grey[200]),
-                    child: TextFormField(
-                        controller: nameController,
-                        decoration: InputDecoration(
-                            hintText: '  Name', border: InputBorder.none)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                          controller: nameController,
+                          decoration: const InputDecoration(
+                              hintText: '  Name', border: InputBorder.none)),
+                    ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   Container(
@@ -85,12 +88,15 @@ class _SignUpPageState extends State<SignUpPage> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: Colors.grey[200]),
-                    child: TextFormField(
-                        controller: emailController,
-                        decoration: InputDecoration(
-                            hintText: '  Email', border: InputBorder.none)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                          controller: emailController,
+                          decoration: const InputDecoration(
+                              hintText: '  Email', border: InputBorder.none)),
+                    ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Container(
@@ -98,23 +104,27 @@ class _SignUpPageState extends State<SignUpPage> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: Colors.grey[200]),
-                    child: TextFormField(
-                        controller: passwordController,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                            hintText: '  Password', border: InputBorder.none)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                          controller: passwordController,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                              hintText: '  Password',
+                              border: InputBorder.none)),
+                    ),
                   ),
                   ElevatedButton(
                     onPressed: () {
                       signUp();
                     },
                     style: ButtonStyle(
-                      fixedSize:
-                          MaterialStateProperty.all<Size>(Size.fromWidth(200)),
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Color(0xFF688a74)),
+                      fixedSize: MaterialStateProperty.all<Size>(
+                          const Size.fromWidth(200)),
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          const Color(0xFF688a74)),
                     ),
-                    child: Text(
+                    child: const Text(
                       "Get Started",
                       style: TextStyle(color: Colors.white),
                     ),
@@ -135,8 +145,9 @@ class _SignUpPageState extends State<SignUpPage> {
     User? user = await authenticationService.signUpWithEmailAndPassword(
         name, email, password);
     if (user != null) {
+      // ignore: use_build_context_synchronously
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => HomePage()));
+          .push(MaterialPageRoute(builder: (context) => const HomePage()));
     } else {
       print('there is some error ');
     }
