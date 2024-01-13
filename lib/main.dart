@@ -1,6 +1,6 @@
 import 'package:chat_app/controller/auth_provider.dart';
 import 'package:chat_app/controller/firebase_provider.dart';
-import 'package:chat_app/controller/otp_provider.dart';
+import 'package:chat_app/controller/basic_provider.dart';
 import 'package:chat_app/firebase_options.dart';
 import 'package:chat_app/view/main_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,7 +26,7 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => OtpProvider(),
+          create: (context) => BasicProvider(),
         ),
         ChangeNotifierProvider(
           create: (context) => AuthProviders(),

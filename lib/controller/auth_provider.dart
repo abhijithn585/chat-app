@@ -1,4 +1,4 @@
-import 'package:chat_app/service/authentication_service.dart';
+import 'package:chat_app/service/auth/authentication_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +18,7 @@ class AuthProviders extends ChangeNotifier {
     return service.signinWithGoogle();
   }
 
-  // signInWithGithub(context) {
-  //   return service.signInWithGithub(context);
-  // }
+  signInWithGithub(context) {
+    return service.signInWithGithub(context);
+  }
 }

@@ -1,5 +1,5 @@
 import 'package:chat_app/model/user_model.dart';
-import 'package:chat_app/view/widget/custom_alert_dialog.dart';
+import 'package:chat_app/view/login_page/widgets/custom_alert_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,10 +18,12 @@ class AuthenticationService {
       UserCredential userCredential = await firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
       //after creating the user , create a new doccument for the user in the users collection
+      final UserModel userdata =
+          UserModel(email: email, name: name, uid: userCredential.user!.uid);
       firestore
           .collection('users')
           .doc(userCredential.user!.uid)
-          .set({'uid': userCredential.user!.uid, 'email': email});
+          .set(userdata.toJson());
       return userCredential.user;
     } catch (e) {
       print('some error');
@@ -38,10 +40,19 @@ class AuthenticationService {
           {'uid': userCredential.user!.uid, 'email': email},
           SetOptions(merge: true));
       return userCredential.user;
-    } catch (e) {
-      print('some error');
+    } on FirebaseAuthException catch (e) {
+      String errorcode = "error singIn";
+      if (e.code == 'wrong-password' || e.code == 'user-not-found') {
+        errorcode = "Icorrect email or password";
+      } else if (e.code == 'user-disabled') {
+        errorcode = "User not found";
+      } else {
+        errorcode = e.code;
+      }
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(errorcode)));
+      return null;
     }
-    return null;
   }
 
   signinWithGoogle() async {
@@ -115,6 +126,23 @@ class AuthenticationService {
         onSuccess();
       }
     } on FirebaseAuthException catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  signInWithGithub(context) async {
+    GithubAuthProvider githubAuthProvider = GithubAuthProvider();
+    try {
+      UserCredential user =
+          await firebaseAuth.signInWithProvider(githubAuthProvider);
+      User gituser = user.user!;
+      final UserModel userdata = UserModel(
+          email: gituser.email, name: gituser.displayName, uid: gituser.uid);
+      firestore.collection("users").doc(gituser.uid).set(userdata.toJson());
+      return user;
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
       throw Exception(e);
     }
   }

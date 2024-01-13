@@ -1,6 +1,6 @@
-import 'package:chat_app/controller/otp_provider.dart';
-import 'package:chat_app/service/authentication_service.dart';
-import 'package:chat_app/view/home_page.dart';
+import 'package:chat_app/controller/basic_provider.dart';
+import 'package:chat_app/service/auth/authentication_service.dart';
+import 'package:chat_app/view/home_page/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -40,14 +40,15 @@ class CustomAlertDialog extends StatelessWidget {
                 border: Border.all(color: Colors.amber)),
           ),
           onChanged: (value) {
-            Provider.of<OtpProvider>(context, listen: false).otpSetter(value);
+            Provider.of<BasicProvider>(context, listen: false).otpSetter(value);
           },
         ),
         const SizedBox(height: 20),
         GestureDetector(
           onTap: () {
             String userotp =
-                Provider.of<OtpProvider>(context, listen: false).otpcode ?? "";
+                Provider.of<BasicProvider>(context, listen: false).otpcode ??
+                    "";
             verifyOtp(context, userotp);
           },
           child: Container(

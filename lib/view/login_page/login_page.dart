@@ -1,27 +1,28 @@
-import 'package:chat_app/service/authentication_service.dart';
-import 'package:chat_app/view/home_page.dart';
+import 'package:chat_app/controller/auth_provider.dart';
+import 'package:chat_app/view/home_page/home_page.dart';
+import 'package:chat_app/view/login_page/phone_login_page.dart';
+import 'package:chat_app/view/register_page/signup_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
-  final AuthenticationService authenticationService = AuthenticationService();
+class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  TextEditingController nameController = TextEditingController();
 
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
-    nameController.dispose();
     super.dispose();
   }
 
@@ -75,22 +76,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
-                          controller: nameController,
-                          decoration: const InputDecoration(
-                              hintText: '  Name', border: InputBorder.none)),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Container(
-                    width: 300,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.grey[200]),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
                           controller: emailController,
                           decoration: const InputDecoration(
                               hintText: '  Email', border: InputBorder.none)),
@@ -114,9 +99,12 @@ class _SignUpPageState extends State<SignUpPage> {
                               border: InputBorder.none)),
                     ),
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   ElevatedButton(
                     onPressed: () {
-                      signUp();
+                      signIn();
                     },
                     style: ButtonStyle(
                       fixedSize: MaterialStateProperty.all<Size>(
@@ -129,6 +117,82 @@ class _SignUpPageState extends State<SignUpPage> {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Consumer<AuthProviders>(
+                    builder: (context, values, child) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.grey[200]),
+                            child: IconButton(
+                                onPressed: () {
+                                  values.singupWithGoogle();
+                                },
+                                icon: const Icon(FontAwesomeIcons.google)),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.grey[200]),
+                            child: IconButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => PhoneLoginPage(),
+                                  ));
+                                },
+                                icon: const Icon(FontAwesomeIcons.phone)),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.grey[200]),
+                            child: IconButton(
+                                onPressed: () {
+                                  values.signInWithGithub(context);
+                                },
+                                icon: const Icon(FontAwesomeIcons.github)),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  GestureDetector(
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Don't have account?",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          'signUp',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const SignUpPage(),
+                      ));
+                    },
+                  ),
                 ],
               ),
             ),
@@ -138,12 +202,11 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  void signUp() async {
-    String name = nameController.text;
+  void signIn() async {
+    final signInServices = Provider.of<AuthProviders>(context, listen: false);
     String email = emailController.text;
     String password = passwordController.text;
-    User? user = await authenticationService.signUpWithEmailAndPassword(
-        name, email, password);
+    User? user = await signInServices.signInWithEmail(email, password, context);
     if (user != null) {
       // ignore: use_build_context_synchronously
       Navigator.of(context)

@@ -1,5 +1,5 @@
-import 'package:chat_app/service/authentication_service.dart';
-import 'package:chat_app/view/widget/custome_phone_field.dart';
+import 'package:chat_app/service/auth/authentication_service.dart';
+import 'package:chat_app/view/login_page/widgets/custome_phone_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -34,7 +34,7 @@ class PhoneLoginPage extends StatelessWidget {
             return true;
           },
           child: SingleChildScrollView(
-            reverse: true,
+            // reverse: true,
             child: Column(
               children: [
                 // Lottie.asset(

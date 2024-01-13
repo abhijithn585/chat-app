@@ -1,32 +1,37 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class MessageModel {
-  final String senderId;
-  final String senderEmail;
-  final String receiverId;
-  final String message;
-  final Timestamp timestamp;
-  MessageModel(
-      {required this.senderId,
-      required this.message,
-      required this.receiverId,
-      required this.senderEmail,
-      required this.timestamp});
-  factory MessageModel.fromJson(Map<String, dynamic> json) {
-    return MessageModel(
-        senderId: json['senderId'],
-        message: json['message'],
-        receiverId: json['receiverId'],
-        senderEmail: json['senderEmail'],
-        timestamp: json['timestamp']);
+class Message {
+  String? messagetype;
+  String? content;
+  String? senderId;
+  String? senderemail;
+  String? recieverId;
+  Timestamp? time;
+  Message(
+      {required this.content,
+      required this.messagetype,
+      required this.recieverId,
+      required this.senderId,
+      required this.time,
+      required this.senderemail});
+
+  factory Message.fromJson(Map<String, dynamic> json) {
+    return Message(
+        messagetype: json["messagetype"],
+        senderemail: json["senderemail"],
+        content: json["content"],
+        recieverId: json["recieverId"],
+        senderId: json["senderId"],
+        time: json["time"]);
   }
   Map<String, dynamic> toJson() {
     return {
-      'senderEmail': senderEmail,
-      'message': message,
-      'receiverId': receiverId,
-      'senderId': senderId,
-      'timestamp': timestamp
+      "messagetype": messagetype,
+      'senderemail': senderemail,
+      "content": content,
+      "recieverId": recieverId,
+      "senderId": senderId,
+      "time": time
     };
   }
 }

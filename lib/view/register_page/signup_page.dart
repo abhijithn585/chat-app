@@ -1,28 +1,27 @@
-import 'package:chat_app/service/authentication_service.dart';
-import 'package:chat_app/view/home_page.dart';
-import 'package:chat_app/view/phone_login_page.dart';
-import 'package:chat_app/view/signup_page.dart';
+import 'package:chat_app/service/auth/authentication_service.dart';
+import 'package:chat_app/view/home_page/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpPageState extends State<SignUpPage> {
   final AuthenticationService authenticationService = AuthenticationService();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
 
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    nameController.dispose();
     super.dispose();
   }
 
@@ -76,6 +75,22 @@ class _LoginPageState extends State<LoginPage> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
+                          controller: nameController,
+                          decoration: const InputDecoration(
+                              hintText: '  Name', border: InputBorder.none)),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                    width: 300,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.grey[200]),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
                           controller: emailController,
                           decoration: const InputDecoration(
                               hintText: '  Email', border: InputBorder.none)),
@@ -99,12 +114,9 @@ class _LoginPageState extends State<LoginPage> {
                               border: InputBorder.none)),
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
                   ElevatedButton(
                     onPressed: () {
-                      signIn();
+                      signUp();
                     },
                     style: ButtonStyle(
                       fixedSize: MaterialStateProperty.all<Size>(
@@ -117,76 +129,6 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.grey[200]),
-                        child: IconButton(
-                            onPressed: () {
-                              authenticationService.signinWithGoogle();
-                            },
-                            icon: const Icon(FontAwesomeIcons.google)),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.grey[200]),
-                        child: IconButton(
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => PhoneLoginPage(),
-                              ));
-                            },
-                            icon: const Icon(FontAwesomeIcons.phone)),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.grey[200]),
-                        child: IconButton(
-                            onPressed: () {},
-                            icon: const Icon(FontAwesomeIcons.github)),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  GestureDetector(
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Don't have account?",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          'signUp',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const SignUpPage(),
-                      ));
-                    },
-                  ),
                 ],
               ),
             ),
@@ -196,11 +138,12 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void signIn() async {
+  void signUp() async {
+    String name = nameController.text;
     String email = emailController.text;
     String password = passwordController.text;
-    User? user = await authenticationService.signInWithEmailAndPassword(
-        email, password, context);
+    User? user = await authenticationService.signUpWithEmailAndPassword(
+        name, email, password);
     if (user != null) {
       // ignore: use_build_context_synchronously
       Navigator.of(context)
