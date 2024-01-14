@@ -20,7 +20,7 @@ class ChatBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<FirebaseProvider>(builder: (context, value, child) {
       if (value.messages.isEmpty) {
-        return Center(child: Image.asset('assets/phone verification.jpg'));
+        return Center(child: Image.asset('assets/2606145_5625.jpg'));
       } else {
         return ListView.builder(
           controller: value.scrollController,

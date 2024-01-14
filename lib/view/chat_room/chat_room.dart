@@ -56,9 +56,9 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   IconButton(
                       onPressed: () {
-                        // Provider.of<FirebaseProvider>(context, listen: false)
-                        //     .clearChat(service.auth.currentUser!.uid,
-                        //         widget.user.uid!);
+                        Provider.of<FirebaseProvider>(context, listen: false)
+                            .clearChat(service.firebaseAuth.currentUser!.uid,
+                                widget.user.uid!);
                       },
                       icon: const Icon(Icons.clear_all_outlined))
                 ],
@@ -107,10 +107,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   },
                                 );
                               },
-                              icon: Image.asset(
-                                'assets/5911276_2992779.jpg',
-                                height: 30,
-                              )),
+                              icon: const Icon(Icons.add)),
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -135,7 +132,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               },
                               icon: const Icon(
                                 Icons.send_rounded,
-                                color: (const Color(0xFF688a74)),
+                                color: (Color(0xFF688a74)),
                                 size: 30,
                               ))
                         ],

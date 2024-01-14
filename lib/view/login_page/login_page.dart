@@ -40,18 +40,24 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 190),
-                  child: Text(
-                    'Go ahead and set up your account',
-                    style: GoogleFonts.roboto(
-                        color: Colors.white,
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'Go ahead and set up your account',
+                      style: GoogleFonts.roboto(
+                          color: Colors.white,
+                          fontSize: 35,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
-                Text(
-                  'Sign in-up to enjoy',
-                  style: GoogleFonts.roboto(
-                      color: const Color.fromARGB(255, 165, 165, 165)),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Sign in-up to enjoy',
+                    style: GoogleFonts.roboto(
+                        color: const Color.fromARGB(255, 165, 165, 165)),
+                  ),
                 )
               ],
             ),

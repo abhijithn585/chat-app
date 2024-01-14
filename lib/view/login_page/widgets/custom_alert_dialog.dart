@@ -3,7 +3,6 @@ import 'package:chat_app/service/auth/authentication_service.dart';
 import 'package:chat_app/view/home_page/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lottie/lottie.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
@@ -18,17 +17,8 @@ class CustomAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return AlertDialog(
-      backgroundColor: const Color.fromRGBO(66, 47, 129, 1),
-      // content: Lottie.asset(
-      //   "assets/lottie/Animation - 1703066556723.json",
-      //   height: 150,
-      // ),
+      backgroundColor: Colors.black,
       actions: [
-        // CustomTextField(
-        //   controller: otpcontroller,
-        //   hinttext: "OTP",
-        //   fillcolor: const Color.fromRGBO(43, 40, 53, 1),
-        // ),
         Pinput(
           length: 6,
           showCursor: true,
@@ -55,7 +45,7 @@ class CustomAlertDialog extends StatelessWidget {
             height: size.height * 0.07,
             width: size.width,
             decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 143, 157, 221),
+              color: const Color(0xFF688a74),
               borderRadius: BorderRadius.circular(25),
             ),
             child: Center(
